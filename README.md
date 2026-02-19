@@ -1,63 +1,51 @@
-# Movie Recommender System
+# 🎬 MovieMind: Vector-Based Recommendation Engine
 
-## Description
-This project is a **content-based movie recommender** built using Python and Streamlit.  
-Users provide a list of movies they like, and the system generates personalized movie recommendations based on the combined “feel” of those movies.  
+**MovieMind** is a full-stack web application that leverages **Natural Language Processing (NLP)** and **Vector Space Modeling** to provide personalized movie recommendations. By analyzing movie metadata—including genres, keywords, directors, and cast—the engine identifies deep semantic relationships between films to suggest titles that align with a user's specific "Taste Profile."
 
-The recommendation engine uses **TF-IDF vectorization** of movie metadata (genres, keywords, cast, directors) and **cosine similarity** to find movies most similar to the user’s preferences.
-The data cleaning and vectorization process can be found in "preparation.ipynb"
+## 🚀 Technical Stack
 
----
+- **Frontend:** React 18, Mantine UI, Axios
+- **Backend:** FastAPI (Python), Uvicorn
+- **Data Science:** Pandas, Scikit-Learn (TF-IDF), SciPy (Sparse Matrices)
+- **Build Tools:** Vite, PostCSS
 
-## Features
-- Accepts up to 5 movies from the user.
-- Handles approximate title matches by standardizing input.
-- Computes a **user preference vector** by averaging the selected movie vectors.
-- Generates **top 10 recommended movies** based on cosine similarity.
-- Simple and responsive **web interface** built with Streamlit.
+## 🧠 System Architecture & Logic
 
----
+### 1. The Vector Space Model
+The core of the engine uses **TF-IDF (Term Frequency-Inverse Document Frequency)** to transform raw movie metadata into a high-dimensional vector space. This allows the system to weight unique attributes (like a specific director or niche genre) more heavily than generic terms.
 
-## Tech Stack
-- **Python** – backend logic and vector operations  
-- **Streamlit** – frontend interface  
-- **Pandas** – data handling and cleaning
-- **Scikit-learn** – TF-IDF vectorization and cosine similarity  
-- **SciPy** – sparse matrix operations  
+### 2. Centroid-Based Preference Calculation
+When a user selects multiple movies, the backend calculates the **centroid (mean vector)** of those selections. This aggregate vector represents the user's "Taste Profile" in the vector space.
 
----
+### 3. Cosine Similarity Engine
+The system measures the "distance" between the User Profile vector and all 10,000+ movies in the database using **Cosine Similarity**. The movies with the highest similarity scores (closest proximity in space) are returned as recommendations.
 
-## Setup
+### 4. Frontend Optimization
+- **Debounced Search:** Implemented a 400ms delay on keystrokes to minimize API overhead and prevent network socket congestion.
+- **Asynchronous State Management:** Utilized React Hooks (`useEffect`, `useState`) to manage live search results and recommendation fetching without UI blocking.
 
-1. Clone the repository:
+## 🛠️ Installation & Setup
+
+### Prerequisites
+- Python 3.10+
+- Node.js 18+
+
+
+### 1. Backend Configuration
+Navigate to the backend directory and install dependencies:
 ```bash
-git clone <repository-url>
-cd movie-recommender
-```
-2. Install dependencies:
-```bash
+cd backend
 pip install -r requirements.txt
+uvicorn main:app --reload
 ```
-3. Ensure files are available
-- Ensure that movies_db.csv and tf_matrix.npz are in the program's folder
 
-4. Run app
+### 2. Frontend Configuration
+Navigate to the frontend directory and launch the development server:
 ```bash
-python -m streamlit run app.py   
+cd frontend
+npm install
+npm run dev
 ```
+## Future Plans
 
-## Screenshots
-
-Entering movies:
-
-<img src="screenshots/movie_entry.png" alt="Edit Entry" width="600"/>
-
-Receiving recommendations:
-
-<img src="screenshots/recommendations.png" alt="View Entries" width="600"/>
-
-
-## Future Immprovements
-
-- Obtain data on other users' movies and ratings in order to train a ML model to 
-  recommend movies based on what users with similar profile vectors liked
+- Integrate TMDB poster paths for more expressive recommendation cards
